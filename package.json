@@ -41,6 +41,9 @@
 		"react-native-reanimated": "^4.5.3",
 		"typescript": "^5.8.0"
 	},
+	"overrides": {
+		"uuid": "^11.1.1"
+	},
 	"react-native-builder-bob": {
 		"source": "src",
 		"output": "lib",

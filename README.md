@@ -21,17 +21,17 @@ npm run build
 npm install file:../react-native-klistra-ui
 ```
 
-| Script        | Description                                      |
-|---------------|--------------------------------------------------|
-| `npm run build`     | Build via [bob](https://github.com/callstack/react-native-builder-bob) → `lib/` (ESM + `.d.ts`) |
-| `npm run prepare`   | Lance le build à l’install / publish             |
-| `npm run typecheck` | Vérifie les types TypeScript                     |
+| Script              | Description                                                                      |
+|---------------------|----------------------------------------------------------------------------------|
+| `npm run build`     | Build via [bob](https://github.com/callstack/react-native-builder-bob) → `lib/` |
+| `npm run prepare`   | Lance le build à l’install / publish                                             |
+| `npm run typecheck` | Vérifie les types TypeScript                                                     |
 
 Structure : sources dans `src/`, sortie compilée dans `lib/` (ignoré par git).
 
 ## Utilisation rapide
 
-Sans `ThemeProvider`, le thème **light** s’applique par défaut.
+Sans `ThemeProvider`, le thème **light** s’applique par défaut. Les composants utilisent les couleurs du thème via des variantes (`primary`, `danger`, etc.).
 
 ```tsx
 import {
@@ -45,31 +45,34 @@ import {
 
 export default function App() {
   return (
-    <>
-      <Btn
-        text="Valider"
-        color="#fff"
-        background="#1e1e1e"
-        onPress={() => {}}
-      />
-      <Badge text="Nouveau" color="#0A84FF" />
+    <ThemeProvider mode="light">
+      <Btn text="Valider" onPress={() => {}} />
+      <Btn text="Supprimer" danger onPress={() => {}} />
+      <Badge text="Nouveau" />
+      <Badge text="Erreur" danger />
       <Icon name="settings" size={24} color="#1e1e1e" />
-      <IconBadge
-        name="alert"
-        size={16}
-        color="#925400"
-        backgroundColor="#feefcb"
-      />
-      <Progress
-        step={2}
-        nbSteps={5}
-        color="#0A84FF"
-        backgroundColor="#E5E5E5"
-      />
-    </>
+      <IconBadge name="alert" size={16} warning />
+      <Progress step={2} nbSteps={5} />
+    </ThemeProvider>
   );
 }
 ```
+
+### Variantes de couleur
+
+`Btn`, `Badge`, `IconBadge` et `Progress` acceptent les mêmes flags de variante, basés sur les tokens du thème :
+
+| Prop        | Défaut  | Token utilisé                                          |
+|-------------|---------|--------------------------------------------------------|
+| `primary`   | `true`  | `primary` (+ `primaryContrast` pour le texte du bouton)|
+| `secondary` | `false` | `secondary`                                            |
+| `tertiary`  | `false` | `tertiary`                                             |
+| `danger`    | `false` | `danger`                                               |
+| `warning`   | `false` | `warning`                                              |
+| `success`   | `false` | `success`                                              |
+| `info`      | `false` | `info`                                                 |
+
+Passer une seule variante à `true` (ex. `danger`). Tu peux aussi forcer des couleurs custom via `color` / `background` quand c’est supporté.
 
 ---
 
@@ -77,60 +80,50 @@ export default function App() {
 
 ### `Btn`
 
-Bouton tactile avec gestion automatique d’un état de chargement. Pendant l’exécution de `onPress` (y compris si async), un `ActivityIndicator` remplace le contenu et le bouton est désactivé.
+Bouton tactile avec état de chargement automatique. Pendant `onPress` (y compris async), un `ActivityIndicator` remplace le contenu. Par défaut : variante `primary` (fond `theme.primary`, texte `theme.primaryContrast`).
 
 ```tsx
-<Btn
-  text="Valider"
-  color="#fff"
-  background="#1e1e1e"
-  onPress={async () => {
-    await save();
-  }}
-/>
-
-<Btn
-  small
-  text="Ajouter"
-  color="#fff"
-  background="#0A84FF"
-  icon="add"
-  onPress={() => {}}
-/>
+<Btn text="Valider" onPress={async () => { await save(); }} />
+<Btn text="Annuler" secondary onPress={() => {}} />
+<Btn small text="Ajouter" icon="add" success onPress={() => {}} />
+<Btn text="Custom" color="#fff" background="#111" onPress={() => {}} />
 ```
 
-| Prop         | Type                               | Défaut  | Description                               |
-|--------------|------------------------------------|---------|-------------------------------------------|
-| `color`      | `string`                           | —       | Couleur du texte, de l’icône et du loader |
-| `background` | `string`                           | —       | Couleur de fond                           |
-| `onPress`    | `(event) => void \| Promise<void>` | —       | Callback au tap (sync ou async)           |
-| `text`       | `string`                           | —       | Libellé (uppercase via les styles)        |
-| `icon`       | `string`                           | —       | Nom d’icône (voir `Icon`)                 |
-| `small`      | `boolean`                          | `false` | Variante compacte                         |
-| `disabled`   | `boolean`                          | `false` | Désactive les interactions                |
+| Prop         | Type                               | Défaut  | Description                                      |
+|--------------|------------------------------------|---------|--------------------------------------------------|
+| `onPress`    | `(event) => void \| Promise<void>` | —       | Callback au tap (sync ou async)                  |
+| `text`       | `string`                           | —       | Libellé (uppercase via les styles)               |
+| `icon`       | `string`                           | —       | Nom d’icône (voir `Icon`)                        |
+| `color`      | `string`                           | —       | Override couleur texte / icône / loader          |
+| `background` | `string`                           | —       | Override couleur de fond                         |
+| `small`      | `boolean`                          | `false` | Variante compacte                                |
+| `disabled`   | `boolean`                          | `false` | Désactive les interactions                       |
+| `primary`…   | `boolean`                          | voir ↑  | Variantes de couleur (voir section Variantes)    |
 
 ---
 
 ### `Badge`
 
-Petit label coloré. Le fond est dérivé de `color` avec une transparence (`color + '1A'`). Peut afficher un texte, ou des `children`. Avec `floating`, position absolute (coin haut-droit).
+Petit label coloré. Le fond est la couleur de variante (ou `color`) avec transparence (`+'1A'`). Peut afficher un texte ou des `children`. Avec `floating`, position absolute (coin haut-droit).
 
 ```tsx
-<Badge text="Nouveau" color="#0A84FF" />
-<Badge text={3} color="#FF3B30" floating />
+<Badge text="Nouveau" />
+<Badge text="Erreur" danger />
+<Badge text={3} warning floating />
 
-<Badge color="#0A84FF">
-  <Icon name="alert" size={12} color="#0A84FF" />
+<Badge info>
+  <Icon name="alert" size={12} color="#5bb7f8" />
 </Badge>
 ```
 
-| Prop       | Type               | Défaut  | Description                                       |
-|------------|--------------------|---------|---------------------------------------------------|
-| `text`     | `string \| number` | —       | Contenu texte (ignoré si `children`)              |
-| `color`    | `string`           | —       | Couleur du texte et base du fond semi-transparent |
-| `floating` | `boolean`          | `false` | Position absolute (haut-droite)                   |
-| `style`    | `Object`           | —       | Styles additionnels                               |
-| `children` | `ReactNode`        | —       | Contenu custom                                    |
+| Prop       | Type               | Défaut  | Description                                    |
+|------------|--------------------|---------|------------------------------------------------|
+| `text`     | `string \| number` | —       | Contenu texte (ignoré si `children`)           |
+| `color`    | `string`           | —       | Override couleur texte / base du fond          |
+| `floating` | `boolean`          | `false` | Position absolute (haut-droite)                |
+| `style`    | `Object`           | —       | Styles additionnels                            |
+| `children` | `ReactNode`        | —       | Contenu custom                                 |
+| `primary`… | `boolean`          | voir ↑  | Variantes de couleur                           |
 
 ---
 
@@ -140,7 +133,7 @@ Icône unifiée basée sur `@expo/vector-icons`. Un nom logique est mappé vers 
 
 ```tsx
 <Icon name="settings" size={24} color="#1e1e1e" />
-<Icon name="add" size={16} color="#0A84FF" />
+<Icon name="add" size={16} color="#004999" />
 ```
 
 | Prop    | Type                   | Défaut | Description                    |
@@ -156,57 +149,43 @@ Icône unifiée basée sur `@expo/vector-icons`. Un nom logique est mappé vers 
 
 ### `IconBadge`
 
-Icône dans un conteneur circulaire coloré. Optionnellement avec bordure via `borderColor`.
+Icône dans un conteneur circulaire coloré selon la variante du thème. Optionnellement avec bordure via `borderColor`.
 
 ```tsx
-<IconBadge
-  name="alert"
-  size={16}
-  color="#925400"
-  backgroundColor="#feefcb"
-/>
-
-<IconBadge
-  name="settings"
-  size={20}
-  color="#fff"
-  backgroundColor="#1e1e1e"
-  borderColor="#DDDDDD"
-/>
+<IconBadge name="alert" size={16} warning />
+<IconBadge name="settings" size={20} primary borderColor="#DDDDDD" />
+<IconBadge name="add" size={16} color="#fff" background="#111" />
 ```
 
-| Prop              | Type     | Défaut | Description                          |
-|-------------------|----------|--------|--------------------------------------|
-| `name`            | `string` | —      | Nom d’icône (voir `Icon`)            |
-| `size`            | `number` | —      | Taille de l’icône                    |
-| `color`           | `string` | —      | Couleur de l’icône                   |
-| `backgroundColor` | `string` | —      | Couleur de fond du cercle            |
-| `borderColor`     | `string` | —      | Si défini, ajoute une bordure de 1px |
+| Prop         | Type     | Défaut | Description                          |
+|--------------|----------|--------|--------------------------------------|
+| `name`       | `string` | —      | Nom d’icône (voir `Icon`)            |
+| `size`       | `number` | —      | Taille de l’icône                    |
+| `color`      | `string` | —      | Override couleur de l’icône          |
+| `background` | `string` | —      | Override couleur de fond             |
+| `borderColor`| `string` | —      | Si défini, ajoute une bordure de 1px |
+| `primary`…   | `boolean`| voir ↑ | Variantes de couleur                 |
 
 ---
 
 ### `Progress`
 
-Barre de progression animée (Reanimated). Remplissage = `step / nbSteps`. Sans `width`, largeur = écran − `padding` du thème.
+Barre de progression animée (Reanimated). Remplissage = `step / nbSteps`. Sans `width`, largeur = écran − `padding` du thème. La barre utilise la variante ; le fond utilise le contraste associé.
 
 ```tsx
-<Progress
-  step={2}
-  nbSteps={5}
-  color="#0A84FF"
-  backgroundColor="#E5E5E5"
-/>
-
-<Progress step={1} nbSteps={3} width={200} color="#34C759" />
+<Progress step={2} nbSteps={5} />
+<Progress step={1} nbSteps={3} success width={200} />
+<Progress step={4} nbSteps={5} color="#0A84FF" background="#E5E5E5" />
 ```
 
-| Prop              | Type     | Défaut                        | Description                                   |
-|-------------------|----------|-------------------------------|-----------------------------------------------|
-| `step`            | `number` | —                             | Étape courante (clampée entre 0 et `nbSteps`) |
-| `nbSteps`         | `number` | —                             | Nombre total d’étapes                         |
-| `color`           | `string` | —                             | Couleur de la barre remplie                   |
-| `backgroundColor` | `string` | —                             | Couleur du fond de la piste                   |
-| `width`           | `number` | largeur écran − padding thème | Largeur totale de la barre                    |
+| Prop         | Type     | Défaut                        | Description                                   |
+|--------------|----------|-------------------------------|-----------------------------------------------|
+| `step`       | `number` | —                             | Étape courante (clampée entre 0 et `nbSteps`) |
+| `nbSteps`    | `number` | —                             | Nombre total d’étapes                         |
+| `color`      | `string` | —                             | Override couleur de la barre remplie          |
+| `background` | `string` | —                             | Override couleur du fond de la piste          |
+| `width`      | `number` | largeur écran − padding thème | Largeur totale de la barre                    |
+| `primary`…   | `boolean`| voir ↑                        | Variantes de couleur                          |
 
 ---
 
@@ -222,7 +201,7 @@ import { ThemeProvider, Btn } from "react-native-klistra-ui";
 export default function App() {
   return (
     <ThemeProvider mode="dark">
-      <Btn text="OK" color="#fff" background="#333" onPress={() => {}} />
+      <Btn text="OK" onPress={() => {}} />
     </ThemeProvider>
   );
 }
@@ -231,7 +210,7 @@ export default function App() {
 - `mode="light"` — thème clair (défaut), basé sur `lightTheme`
 - `mode="dark"` — thème sombre, basé sur `darkTheme`
 
-Tu peux basculer dynamiquement selon l’état de ton app :
+Basculer dynamiquement :
 
 ```tsx
 const [mode, setMode] = useState<"light" | "dark">("light");
@@ -241,7 +220,7 @@ const [mode, setMode] = useState<"light" | "dark">("light");
 </ThemeProvider>
 ```
 
-Ou suivre le thème système avec `useColorScheme()` de React Native :
+Ou suivre le thème système avec `useColorScheme()` :
 
 ```tsx
 import { useColorScheme } from "react-native";
@@ -260,7 +239,7 @@ export default function App() {
 
 ### Customiser les tokens (overrides)
 
-Passer un objet `theme` partiel : seules les clés fournies remplacent celles du mode actif (`light` ou `dark`).
+Passer un objet `theme` partiel : seules les clés fournies remplacent celles du mode actif.
 
 ```tsx
 import { ThemeProvider } from "react-native-klistra-ui";
@@ -271,6 +250,7 @@ export default function App() {
       mode="light"
       theme={{
         primary: "#0A84FF",
+        tertiary: "#63cfbc",
         "bg-body": "#F0F4FF",
         "text-body": "#0A1628",
         "component-border-radius": 12,
@@ -284,7 +264,7 @@ export default function App() {
 }
 ```
 
-Les overrides s’appliquent **par-dessus** le mode : tu peux donc avoir un dark mode + ta marque (`primary`, radius, etc.) sans redéfinir tout le thème.
+Les overrides s’appliquent **par-dessus** le mode : dark mode + ta marque (`primary`, radius, etc.) sans tout redéfinir.
 
 ### Props de `ThemeProvider`
 
@@ -325,20 +305,22 @@ function MyScreen() {
 
 #### Couleurs sémantiques
 
-| Token               | Type     | Description              |
-|---------------------|----------|--------------------------|
-| `primary`           | `string` | Couleur primaire         |
-| `secondary`         | `string` | Couleur secondaire       |
-| `danger`            | `string` | Erreur / danger          |
-| `warning`           | `string` | Avertissement            |
-| `success`           | `string` | Succès                   |
-| `info`              | `string` | Information              |
-| `primaryContrast`   | `string` | Contraste sur `primary`  |
-| `secondaryContrast` | `string` | Contraste sur `secondary`|
-| `dangerContrast`    | `string` | Contraste sur `danger`   |
-| `warningContrast`   | `string` | Contraste sur `warning`  |
-| `successContrast`   | `string` | Contraste sur `success`  |
-| `infoContrast`      | `string` | Contraste sur `info`     |
+| Token               | Type     | Description               |
+|---------------------|----------|---------------------------|
+| `primary`           | `string` | Couleur primaire          |
+| `secondary`         | `string` | Couleur secondaire        |
+| `tertiary`          | `string` | Couleur tertiaire         |
+| `danger`            | `string` | Erreur / danger           |
+| `warning`           | `string` | Avertissement             |
+| `success`           | `string` | Succès                    |
+| `info`              | `string` | Information               |
+| `primaryContrast`   | `string` | Contraste sur `primary`   |
+| `secondaryContrast` | `string` | Contraste sur `secondary` |
+| `tertiaryContrast`  | `string` | Contraste sur `tertiary`  |
+| `dangerContrast`    | `string` | Contraste sur `danger`    |
+| `warningContrast`   | `string` | Contraste sur `warning`   |
+| `successContrast`   | `string` | Contraste sur `success`   |
+| `infoContrast`      | `string` | Contraste sur `info`      |
 
 #### Surfaces & texte
 
@@ -361,21 +343,21 @@ function MyScreen() {
 | `border-radius`           | `number` | Radius général        |
 | `component-border-radius` | `number` | Radius des composants |
 
-Les thèmes de base sont aussi exportés (`lightTheme`, `darkTheme`) si tu veux t’en servir comme référence.
+Les thèmes de base sont aussi exportés (`lightTheme`, `darkTheme`).
 
 ### API thème
 
-| Export            | Rôle                                    |
-|-------------------|-----------------------------------------|
-| `ThemeProvider`   | Fournit le thème aux composants         |
-| `useTheme()`      | Retourne les tokens du thème actif      |
-| `useThemeMode()`  | Retourne `"light"` ou `"dark"`          |
-| `lightTheme`      | Thème clair par défaut                  |
-| `darkTheme`       | Thème sombre par défaut                 |
-| `createStyles(v)` | Factory de styles à partir d’un thème   |
-| `useStyles()`     | Styles générés à partir du thème actif  |
-| `ThemeVariables`  | Type TypeScript des tokens              |
-| `ThemeMode`       | Type `"light" \| "dark"`                |
+| Export            | Rôle                                   |
+|-------------------|----------------------------------------|
+| `ThemeProvider`   | Fournit le thème aux composants        |
+| `useTheme()`      | Retourne les tokens du thème actif     |
+| `useThemeMode()`  | Retourne `"light"` ou `"dark"`         |
+| `lightTheme`      | Thème clair par défaut                 |
+| `darkTheme`       | Thème sombre par défaut                |
+| `createStyles(v)` | Factory de styles à partir d’un thème  |
+| `useStyles()`     | Styles générés à partir du thème actif |
+| `ThemeVariables`  | Type TypeScript des tokens             |
+| `ThemeMode`       | Type `"light" \| "dark"`               |
 
 ## Licence
 

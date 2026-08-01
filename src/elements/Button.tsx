@@ -6,18 +6,27 @@ import { Icon } from "./Icon";
 
 type Props = {
     small?: boolean,
-    color: string, 
-    background: string, 
+    color?: string, 
+    background?: string, 
     text?: string, 
     onPress: ((event: GestureResponderEvent) => void | Promise<void>), 
     disabled? : boolean,
     icon?: string,
+    primary?: boolean,
+    secondary?: boolean,
+    tertiary?: boolean,
+    danger?: boolean,
+    warning?: boolean,
+    success?: boolean,
+    info?: boolean,
 }
 
-export const Btn = ({ small = false, color, background, text, onPress, disabled = false, icon }: Props) => {
+export const Btn = ({ small = false, color, background, text, onPress, disabled = false, icon, primary = true, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const [isLoading, setIsLoading] = useState(false);
     const styles = useStyles();
     const theme = useTheme();
+    const backgroundColor = background || primary ? theme.primary : secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
+    const textColor = color || primary ? theme.primaryContrast : secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
 
     const onBtnPressed = async (event: GestureResponderEvent) => {
         if (disabled || isLoading) {
@@ -40,14 +49,14 @@ export const Btn = ({ small = false, color, background, text, onPress, disabled 
                 styles.button, 
                 //Petit
                 small && styles.buttonSmall,
-                { backgroundColor: background},
+                { backgroundColor: backgroundColor},
                 {flexDirection: 'row', alignItems: 'center', gap: theme.gap / 2},
             ]}>
             
-            {isLoading && <ActivityIndicator size="small" color={color} />}
+            {isLoading && <ActivityIndicator size="small" color={textColor} />}
             {!isLoading && (
                 <>         
-                   {icon && <Icon name={icon} size={small ? 12 : 16} color={color} />}
+                   {icon && <Icon name={icon} size={small ? 12 : 16} color={textColor} />}
                    {text && (
                         <Text 
                             style={[
@@ -55,7 +64,7 @@ export const Btn = ({ small = false, color, background, text, onPress, disabled 
                                 styles.buttonText, 
                                 //Petit
                                 small && styles.buttonSmallText, 
-                                { color: color },
+                                { color: textColor },
                             ]}
                         >
                             {text}
