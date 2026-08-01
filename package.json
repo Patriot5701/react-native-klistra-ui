@@ -1,0 +1,13 @@
+{
+  "name": "react-native-klistra-ui",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Clément Lauer",
+  "license": "MIT",
+  "dependencies": {
+    "@expo/vector-icons": "^15.1.1",
+    "react": "^19.2.8",
+    "react-native": "^0.86.2",
+    "react-native-reanimated": "^4.5.3"
+  }
+}
