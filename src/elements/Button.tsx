@@ -1,4 +1,4 @@
-import { ActivityIndicator, GestureResponderEvent, Text, TouchableOpacity } from "react-native"
+import { ActivityIndicator, Text, TouchableOpacity, type GestureResponderEvent } from "react-native"
 import { useState } from "react";
 import { useTheme } from "../config/ThemeContext";
 import { useStyles } from "../styles/useStyles";
@@ -27,7 +27,7 @@ export const Btn = ({ small = false, color, background, text, onPress, disabled 
         setIsLoading(true);
         try {
             // Laisse React Native rendre l'état loading avant une action potentiellement bloquante.
-            await new Promise(resolve => setTimeout(resolve, 0));
+            await new Promise(resolve => setTimeout(resolve as () => void, 0));
             await Promise.resolve(onPress(event));
         } finally {
             setIsLoading(false);

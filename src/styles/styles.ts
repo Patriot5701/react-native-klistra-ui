@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { ThemeVariables } from "./variables";
+import type { ThemeVariables } from "./variables";
 
 export const createStyles = (v: ThemeVariables) =>
   StyleSheet.create({

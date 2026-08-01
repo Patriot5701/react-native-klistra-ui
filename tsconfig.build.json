@@ -1,0 +1,16 @@
+{
+	"extends": "./tsconfig",
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"emitDeclarationOnly": true,
+		"outDir": "lib/typescript",
+		"noEmit": false,
+		"verbatimModuleSyntax": false
+	},
+	"exclude": [
+		"**/__tests__",
+		"**/__fixtures__",
+		"**/__mocks__"
+	]
+}

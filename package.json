@@ -1,13 +1,57 @@
 {
-  "name": "react-native-klistra-ui",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Clément Lauer",
-  "license": "MIT",
-  "dependencies": {
-    "@expo/vector-icons": "^15.1.1",
-    "react": "^19.2.8",
-    "react-native": "^0.86.2",
-    "react-native-reanimated": "^4.5.3"
-  }
+	"name": "react-native-klistra-ui",
+	"version": "1.0.0",
+	"description": "Librairie de composants React Native avec thème light / dark",
+	"author": "Clément Lauer",
+	"license": "MIT",
+	"main": "./lib/module/index.js",
+	"types": "./lib/typescript/src/index.d.ts",
+	"exports": {
+		".": {
+			"source": "./src/index.ts",
+			"types": "./lib/typescript/src/index.d.ts",
+			"default": "./lib/module/index.js"
+		},
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"src",
+		"lib",
+		"!**/__tests__",
+		"!**/__fixtures__",
+		"!**/__mocks__"
+	],
+	"scripts": {
+		"prepare": "bob build",
+		"build": "bob build",
+		"typecheck": "tsc --noEmit"
+	},
+	"peerDependencies": {
+		"@expo/vector-icons": "*",
+		"react": "*",
+		"react-native": "*",
+		"react-native-reanimated": ">=3"
+	},
+	"devDependencies": {
+		"@expo/vector-icons": "^15.1.1",
+		"@types/react": "^19.0.0",
+		"react": "^19.2.8",
+		"react-native": "^0.86.2",
+		"react-native-builder-bob": "^0.40.0",
+		"react-native-reanimated": "^4.5.3",
+		"typescript": "^5.8.0"
+	},
+	"react-native-builder-bob": {
+		"source": "src",
+		"output": "lib",
+		"targets": [
+			[
+				"module",
+				{
+					"esm": true
+				}
+			],
+			"typescript"
+		]
+	}
 }

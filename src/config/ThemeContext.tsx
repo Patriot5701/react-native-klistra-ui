@@ -1,9 +1,9 @@
-import { createContext, useContext, useMemo, ReactNode } from "react";
+import { createContext, useContext, useMemo, type ReactNode } from "react";
 import {
-	ThemeMode,
-	ThemeVariables,
 	lightTheme,
 	darkTheme,
+	type ThemeMode,
+	type ThemeVariables,
 } from "../styles/variables";
 
 type ThemeContextValue = {
@@ -22,7 +22,7 @@ type ThemeProviderProps = {
 	children: ReactNode;
 };
 
-export function ThemeProvider({ mode = "light", theme: overrides, children }: ThemeProviderProps) {
+function ThemeProvider({ mode = "light", theme: overrides, children }: ThemeProviderProps) {
 	const value = useMemo<ThemeContextValue>(() => {
 		const base = mode === "dark" ? darkTheme : lightTheme;
 		return {
@@ -36,10 +36,17 @@ export function ThemeProvider({ mode = "light", theme: overrides, children }: Th
 	);
 }
 
-export function useTheme(): ThemeVariables {
+function useTheme(): ThemeVariables {
 	return useContext(ThemeContext).theme;
 }
 
-export function useThemeMode(): ThemeMode {
+function useThemeMode(): ThemeMode {
 	return useContext(ThemeContext).mode;
+}
+
+
+export {
+	ThemeProvider,
+	useTheme,
+	useThemeMode,
 }

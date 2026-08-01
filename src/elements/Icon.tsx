@@ -1,5 +1,5 @@
 import { AntDesign, Feather, FontAwesome, Ionicons, MaterialIcons, FontAwesome5, Entypo } from "@expo/vector-icons"
-import { StyleProp, TextStyle } from "react-native";
+import type { StyleProp, TextStyle } from "react-native";
 
 type Props = {
     name: string,

@@ -8,10 +8,12 @@ export type ThemeVariables = {
     warning: string;
     success: string;
     info: string;
+    tertiary: string;
 
     //Couleurs contrastées
     primaryContrast: string;
     secondaryContrast: string;
+    tertiaryContrast: string;
     dangerContrast: string;
     warningContrast: string;
     successContrast: string;
@@ -41,14 +43,16 @@ const shared = {
 } as const;
 
 export const lightTheme: ThemeVariables = {
-    primary: "#007AFF",
-    secondary: "#007AFF",
-    danger: "#FF3B30",
-    warning: "#e6ac28",
-    success: "#4CD964",
-    info: "#5AC8FA",
+    primary: "#004999",
+    secondary: "#d84496",
+    tertiary: "#63cfbc",
+    danger: "#e86d80",
+    warning: "#eeba1e",
+    success: "#66cf96",
+    info: "#5bb7f8",
     primaryContrast: "#FFFFFF",
     secondaryContrast: "#FFFFFF",
+    tertiaryContrast: "#FFFFFF",
     dangerContrast: "#FFFFFF",
     warningContrast: "#FFFFFF",
     successContrast: "#FFFFFF",
@@ -64,14 +68,16 @@ export const lightTheme: ThemeVariables = {
 };
 
 export const darkTheme: ThemeVariables = {
-    primary: "#007AFF",
-    secondary: "#007AFF",
-    danger: "#FF3B30",
-    warning: "#e6ac28",
-    success: "#4CD964",
-    info: "#5AC8FA",
+    primary: "#004999",
+    secondary: "#d84496",
+    tertiary: "#63cfbc",
+    danger: "#e86d80",
+    warning: "#eeba1e",
+    success: "#66cf96",
+    info: "#5bb7f8",
     primaryContrast: "#FFFFFF",
     secondaryContrast: "#FFFFFF",
+    tertiaryContrast: "#FFFFFF",
     dangerContrast: "#FFFFFF",
     warningContrast: "#FFFFFF",
     successContrast: "#FFFFFF",
