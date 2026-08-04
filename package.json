@@ -1,6 +1,6 @@
 {
 	"name": "react-native-klistra-ui",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Librairie de composants React Native avec thème light / dark",
 	"author": "Clément Lauer",
 	"license": "MIT",
