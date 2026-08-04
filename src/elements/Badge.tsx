@@ -21,8 +21,12 @@ type Props = {
 export const Badge = ({ text, color, floating = false, style, children, primary = true, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const styles = useStyles();
     const theme = useTheme();
-    const backgroundColor = color+'1A' || primary ? theme.primary+'1A' : secondary ? theme.secondary+'1A' : tertiary ? theme.tertiary+'1A' : danger ? theme.danger+'1A' : warning ? theme.warning+'1A' : success ? theme.success+'1A' : info ? theme.info+'1A' : theme.primary+'1A';
-    const textColor = color || primary ? theme.primary : secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
+
+    const translucidColor = (color: string) => {
+        return color+'1A';
+    }
+    const backgroundColor = (color ? translucidColor(color) : secondary ? translucidColor(theme.secondary) : tertiary ? translucidColor(theme.tertiary) : danger ? translucidColor(theme.danger) : warning ? translucidColor(theme.warning) : success ? translucidColor(theme.success) : info ? translucidColor(theme.info) : translucidColor(theme.primary));
+    const textColor = color || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
     const containerStyle = [
         styles.badge,
         { backgroundColor: backgroundColor, color: textColor },

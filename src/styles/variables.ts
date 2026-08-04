@@ -27,6 +27,7 @@ export type ThemeVariables = {
     "text-disabled": string;
     "border-color": string;
     "bg-card": string;
+    "bg-form": string;
 
     //Sizes
     gap: number;
@@ -46,17 +47,17 @@ export const lightTheme: ThemeVariables = {
     primary: "#004999",
     secondary: "#d84496",
     tertiary: "#63cfbc",
-    danger: "#e86d80",
+    danger: "#D9314A",
     warning: "#eeba1e",
     success: "#66cf96",
     info: "#5bb7f8",
     primaryContrast: "#FFFFFF",
-    secondaryContrast: "#FFFFFF",
-    tertiaryContrast: "#FFFFFF",
+    secondaryContrast: "#000000",
+    tertiaryContrast: "#000000",
     dangerContrast: "#FFFFFF",
-    warningContrast: "#FFFFFF",
-    successContrast: "#FFFFFF",
-    infoContrast: "#FFFFFF",
+    warningContrast: "#000000",
+    successContrast: "#000000",
+    infoContrast: "#000000",
     "bg-body": "#F6F6F6",
     "bg-secondary": "#E5E5E5",
     "text-body": "#1e1e1e",
@@ -64,6 +65,7 @@ export const lightTheme: ThemeVariables = {
     "text-disabled": "#a0aab4",
     "border-color": "#DDDDDDFF",
     "bg-card": "#FCFCFC",
+    "bg-form": "#FFFFFF",
     ...shared,
 };
 
@@ -71,17 +73,17 @@ export const darkTheme: ThemeVariables = {
     primary: "#004999",
     secondary: "#d84496",
     tertiary: "#63cfbc",
-    danger: "#e86d80",
+    danger: "#D9314A",
     warning: "#eeba1e",
     success: "#66cf96",
     info: "#5bb7f8",
     primaryContrast: "#FFFFFF",
-    secondaryContrast: "#FFFFFF",
-    tertiaryContrast: "#FFFFFF",
+    secondaryContrast: "#000000",
+    tertiaryContrast: "#000000",
     dangerContrast: "#FFFFFF",
-    warningContrast: "#FFFFFF",
-    successContrast: "#FFFFFF",
-    infoContrast: "#FFFFFF",
+    warningContrast: "#000000",
+    successContrast: "#000000",
+    infoContrast: "#000000",
     "bg-body": "#121212",
     "bg-secondary": "#1E1E1E",
     "text-body": "#F5F5F5",
@@ -89,5 +91,6 @@ export const darkTheme: ThemeVariables = {
     "text-disabled": "#6B6B6B",
     "border-color": "#333333",
     "bg-card": "#1A1A1A",
+    "bg-form": "#000000",
     ...shared,
 };

@@ -30,8 +30,13 @@ export const Progress = ({ color, background, step, nbSteps, width, primary = tr
     }, [normalizedStep, progressWidth, nbSteps]);
 
     return (
-        <SafeAreaView style={{backgroundColor: backgroundColor, borderRadius: '5px'}}>
-            <Animated.View style={[{height: 10, backgroundColor: progressColor, borderRadius: '5px'}, style]} />
+        <SafeAreaView style={{ backgroundColor: backgroundColor, borderRadius: 5 }}>
+            <Animated.View
+                style={[
+                    { height: 10, backgroundColor: progressColor, borderRadius: 5 },
+                    style,
+                ]}
+            />
         </SafeAreaView>
     )
 }

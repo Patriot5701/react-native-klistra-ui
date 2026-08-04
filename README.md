@@ -13,21 +13,32 @@ Les peer dependencies (`react`, `react-native`, `react-native-reanimated`, `@exp
 ### Développement local
 
 ```bash
-# dans react-native-klistra-ui
 npm install
+npm start
+```
+
+Ça lance Expo à la racine : le playground est `App.tsx` (importe directement depuis `./src`). Touche `a` / `i` / `w` pour Android, iOS ou web.
+
+| Script              | Description                                                                      |
+|---------------------|----------------------------------------------------------------------------------|
+| `npm start`         | Lance le playground Expo (`App.tsx`)                                             |
+| `npm run android`   | Expo → Android                                                                   |
+| `npm run ios`       | Expo → iOS                                                                       |
+| `npm run build`     | Build via [bob](https://github.com/callstack/react-native-builder-bob) → `lib/` |
+| `npm run prepare`   | Lance le build à l’install / publish                                             |
+| `npm run typecheck` | Vérifie les types TypeScript                                                     |
+
+Structure : sources dans `src/`, sortie compilée dans `lib/` (ignoré par git). `App.tsx` / config Expo restent locaux et ne sont pas publiés sur npm.
+
+Pour consommer la lib depuis une autre app en local :
+
+```bash
+# dans react-native-klistra-ui
 npm run build
 
 # dans ton app
 npm install file:../react-native-klistra-ui
 ```
-
-| Script              | Description                                                                      |
-|---------------------|----------------------------------------------------------------------------------|
-| `npm run build`     | Build via [bob](https://github.com/callstack/react-native-builder-bob) → `lib/` |
-| `npm run prepare`   | Lance le build à l’install / publish                                             |
-| `npm run typecheck` | Vérifie les types TypeScript                                                     |
-
-Structure : sources dans `src/`, sortie compilée dans `lib/` (ignoré par git).
 
 ## Utilisation rapide
 
@@ -41,6 +52,7 @@ import {
   Icon,
   IconBadge,
   Progress,
+  Chip,
 } from "react-native-klistra-ui";
 
 export default function App() {
@@ -53,6 +65,7 @@ export default function App() {
       <Icon name="settings" size={24} color="#1e1e1e" />
       <IconBadge name="alert" size={16} warning />
       <Progress step={2} nbSteps={5} />
+      <Chip text="Filtre" isSelected onPress={() => {}} />
     </ThemeProvider>
   );
 }
@@ -60,7 +73,7 @@ export default function App() {
 
 ### Variantes de couleur
 
-`Btn`, `Badge`, `IconBadge` et `Progress` acceptent les mêmes flags de variante, basés sur les tokens du thème :
+`Btn`, `Badge`, `IconBadge`, `Progress` et `Chip` acceptent les mêmes flags de variante, basés sur les tokens du thème :
 
 | Prop        | Défaut  | Token utilisé                                          |
 |-------------|---------|--------------------------------------------------------|
@@ -186,6 +199,37 @@ Barre de progression animée (Reanimated). Remplissage = `step / nbSteps`. Sans 
 | `background` | `string` | —                             | Override couleur du fond de la piste          |
 | `width`      | `number` | largeur écran − padding thème | Largeur totale de la barre                    |
 | `primary`…   | `boolean`| voir ↑                        | Variantes de couleur                          |
+
+---
+
+### `Chip`
+
+Pastille sélectionnable (filtre / tag). Non sélectionné : fond `bg-card` et bordure du thème. Sélectionné : couleurs de la variante (ou overrides).
+
+```tsx
+const [selected, setSelected] = useState("all");
+
+<Chip
+  text="Tous"
+  isSelected={selected === "all"}
+  onPress={() => setSelected("all")}
+/>
+<Chip
+  text="Terminé"
+  success
+  isSelected={selected === "done"}
+  onPress={() => setSelected("done")}
+/>
+```
+
+| Prop                 | Type       | Défaut  | Description                         |
+|----------------------|------------|---------|-------------------------------------|
+| `text`               | `string`   | —       | Libellé                             |
+| `isSelected`         | `boolean`  | —       | État sélectionné                    |
+| `onPress`            | `() => void` | —     | Callback au tap                     |
+| `selectedBackground` | `string`   | —       | Override fond quand sélectionné     |
+| `selectedColor`      | `string`   | —       | Override texte quand sélectionné    |
+| `primary`…           | `boolean`  | voir ↑  | Variantes de couleur                |
 
 ---
 

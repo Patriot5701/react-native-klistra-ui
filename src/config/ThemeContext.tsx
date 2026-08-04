@@ -1,52 +1,51 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import {
-	lightTheme,
-	darkTheme,
-	type ThemeMode,
-	type ThemeVariables,
+    lightTheme,
+    darkTheme,
+    type ThemeMode,
+    type ThemeVariables,
 } from "../styles/variables";
 
 type ThemeContextValue = {
-	mode: ThemeMode;
-	theme: ThemeVariables;
+    mode: ThemeMode;
+    theme: ThemeVariables;
 };
 
 const ThemeContext = createContext<ThemeContextValue>({
-	mode: "light",
-	theme: lightTheme,
+    mode: "light",
+    theme: lightTheme,
 });
 
 type ThemeProviderProps = {
-	mode?: ThemeMode;
-	theme?: Partial<ThemeVariables>;
-	children: ReactNode;
+    mode?: ThemeMode;
+    theme?: Partial<ThemeVariables>;
+    children: ReactNode;
 };
 
 function ThemeProvider({ mode = "light", theme: overrides, children }: ThemeProviderProps) {
-	const value = useMemo<ThemeContextValue>(() => {
-		const base = mode === "dark" ? darkTheme : lightTheme;
-		return {
-			mode,
-			theme: { ...base, ...overrides },
-		};
-	}, [mode, overrides]);
+    const value = useMemo<ThemeContextValue>(() => {
+        const base = mode === "dark" ? darkTheme : lightTheme;
+        return {
+            mode,
+            theme: { ...base, ...overrides },
+        };
+    }, [mode, overrides]);
 
-	return (
-		<ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
-	);
+    return (
+        <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    );
 }
 
 function useTheme(): ThemeVariables {
-	return useContext(ThemeContext).theme;
+    return useContext(ThemeContext).theme;
 }
 
 function useThemeMode(): ThemeMode {
-	return useContext(ThemeContext).mode;
+    return useContext(ThemeContext).mode;
 }
-
 
 export {
-	ThemeProvider,
-	useTheme,
-	useThemeMode,
-}
+    ThemeProvider,
+    useTheme,
+    useThemeMode,
+};

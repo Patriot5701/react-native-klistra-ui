@@ -1,4 +1,4 @@
-import { AntDesign, Feather, FontAwesome, Ionicons, MaterialIcons, FontAwesome5, Entypo } from "@expo/vector-icons"
+import { AntDesign, Entypo, Feather, FontAwesome, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import type { StyleProp, TextStyle } from "react-native";
 
 type Props = {
@@ -34,6 +34,8 @@ export const Icon = ({ name, size, color, style }: Props) => {
             return <Entypo name="minus" size={size} color={color} style={style} />
         case "money":
             return <Ionicons name="logo-euro" size={size} color={color} style={style} />
+        case "pin":
+            return <Entypo name="location-pin" size={size} color={color} style={style} />
         case "rankings":
             return <Ionicons name="podium" size={size} color={color} style={style} />
         case "return":

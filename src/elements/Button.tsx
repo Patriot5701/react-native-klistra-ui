@@ -25,8 +25,8 @@ export const Btn = ({ small = false, color, background, text, onPress, disabled 
     const [isLoading, setIsLoading] = useState(false);
     const styles = useStyles();
     const theme = useTheme();
-    const backgroundColor = background || primary ? theme.primary : secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
-    const textColor = color || primary ? theme.primaryContrast : secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
+    const backgroundColor = background || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
+    const textColor = color || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
 
     const onBtnPressed = async (event: GestureResponderEvent) => {
         if (disabled || isLoading) {

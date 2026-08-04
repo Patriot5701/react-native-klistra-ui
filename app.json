@@ -1,0 +1,16 @@
+{
+    "expo": {
+        "name": "Klistra UI",
+        "slug": "react-native-klistra-ui",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "userInterfaceStyle": "automatic",
+        "newArchEnabled": true,
+        "android": {
+            "package": "com.klistra.ui"
+        },
+        "ios": {
+            "bundleIdentifier": "com.klistra.ui"
+        }
+    }
+}
