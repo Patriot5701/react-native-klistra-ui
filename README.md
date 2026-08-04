@@ -8,7 +8,7 @@ Librairie de composants React Native avec thème light / dark personnalisable.
 npm install react-native-klistra-ui
 ```
 
-Les peer dependencies (`react`, `react-native`, `react-native-reanimated`, `@expo/vector-icons`) sont en général installées automatiquement (npm 7+). Ajoute-les manuellement seulement si ton gestionnaire de paquets te le demande.
+Les peer dependencies (`react`, `react-native`, `react-native-reanimated`, `react-native-worklets`, `@expo/vector-icons`) sont en général installées automatiquement (npm 7+). Ajoute-les manuellement seulement si ton gestionnaire de paquets te le demande.
 
 ### Développement local
 
@@ -17,7 +17,7 @@ npm install
 npm start
 ```
 
-Ça lance Expo à la racine : le playground est `App.tsx` (importe directement depuis `./src`). Touche `a` / `i` / `w` pour Android, iOS ou web.
+Expo tourne à la racine : le playground est `App.tsx` (imports depuis `./src`). Touche `a` / `i` / `w` pour Android, iOS ou web.
 
 | Script              | Description                                                                      |
 |---------------------|----------------------------------------------------------------------------------|
@@ -25,12 +25,9 @@ npm start
 | `npm run android`   | Expo → Android                                                                   |
 | `npm run ios`       | Expo → iOS                                                                       |
 | `npm run build`     | Build via [bob](https://github.com/callstack/react-native-builder-bob) → `lib/` |
-| `npm run prepare`   | Lance le build à l’install / publish                                             |
 | `npm run typecheck` | Vérifie les types TypeScript                                                     |
 
-Structure : sources dans `src/`, sortie compilée dans `lib/` (ignoré par git). `App.tsx` / config Expo restent locaux et ne sont pas publiés sur npm.
-
-Pour consommer la lib depuis une autre app en local :
+Pour lier la lib en local depuis une autre app :
 
 ```bash
 # dans react-native-klistra-ui
@@ -53,6 +50,9 @@ import {
   IconBadge,
   Progress,
   Chip,
+  Input,
+  Accordion,
+  Card,
 } from "react-native-klistra-ui";
 
 export default function App() {
@@ -73,11 +73,11 @@ export default function App() {
 
 ### Variantes de couleur
 
-`Btn`, `Badge`, `IconBadge`, `Progress` et `Chip` acceptent les mêmes flags de variante, basés sur les tokens du thème :
+`Btn`, `Badge`, `IconBadge`, `Progress` et `Chip` acceptent les mêmes flags de variante, basés sur les tokens du thème. Sans flag, la variante **primary** s’applique.
 
 | Prop        | Défaut  | Token utilisé                                          |
 |-------------|---------|--------------------------------------------------------|
-| `primary`   | `true`  | `primary` (+ `primaryContrast` pour le texte du bouton)|
+| _(défaut)_  | —       | `primary` (+ `primaryContrast` pour le texte du bouton)|
 | `secondary` | `false` | `secondary`                                            |
 | `tertiary`  | `false` | `tertiary`                                             |
 | `danger`    | `false` | `danger`                                               |
@@ -111,7 +111,7 @@ Bouton tactile avec état de chargement automatique. Pendant `onPress` (y compri
 | `background` | `string`                           | —       | Override couleur de fond                         |
 | `small`      | `boolean`                          | `false` | Variante compacte                                |
 | `disabled`   | `boolean`                          | `false` | Désactive les interactions                       |
-| `primary`…   | `boolean`                          | voir ↑  | Variantes de couleur (voir section Variantes)    |
+| `secondary`… | `boolean`                          | voir ↑  | Variantes de couleur (voir section Variantes)    |
 
 ---
 
@@ -136,7 +136,7 @@ Petit label coloré. Le fond est la couleur de variante (ou `color`) avec transp
 | `floating` | `boolean`          | `false` | Position absolute (haut-droite)                |
 | `style`    | `Object`           | —       | Styles additionnels                            |
 | `children` | `ReactNode`        | —       | Contenu custom                                 |
-| `primary`… | `boolean`          | voir ↑  | Variantes de couleur                           |
+| `secondary`… | `boolean`          | voir ↑  | Variantes de couleur                           |
 
 ---
 
@@ -166,7 +166,7 @@ Icône dans un conteneur circulaire coloré selon la variante du thème. Optionn
 
 ```tsx
 <IconBadge name="alert" size={16} warning />
-<IconBadge name="settings" size={20} primary borderColor="#DDDDDD" />
+<IconBadge name="settings" size={20} borderColor="#DDDDDD" />
 <IconBadge name="add" size={16} color="#fff" background="#111" />
 ```
 
@@ -177,7 +177,7 @@ Icône dans un conteneur circulaire coloré selon la variante du thème. Optionn
 | `color`      | `string` | —      | Override couleur de l’icône          |
 | `background` | `string` | —      | Override couleur de fond             |
 | `borderColor`| `string` | —      | Si défini, ajoute une bordure de 1px |
-| `primary`…   | `boolean`| voir ↑ | Variantes de couleur                 |
+| `secondary`… | `boolean`| voir ↑ | Variantes de couleur                 |
 
 ---
 
@@ -198,7 +198,7 @@ Barre de progression animée (Reanimated). Remplissage = `step / nbSteps`. Sans 
 | `color`      | `string` | —                             | Override couleur de la barre remplie          |
 | `background` | `string` | —                             | Override couleur du fond de la piste          |
 | `width`      | `number` | largeur écran − padding thème | Largeur totale de la barre                    |
-| `primary`…   | `boolean`| voir ↑                        | Variantes de couleur                          |
+| `secondary`… | `boolean`| voir ↑                        | Variantes de couleur                          |
 
 ---
 
@@ -229,7 +229,7 @@ const [selected, setSelected] = useState("all");
 | `onPress`            | `() => void` | —     | Callback au tap                     |
 | `selectedBackground` | `string`   | —       | Override fond quand sélectionné     |
 | `selectedColor`      | `string`   | —       | Override texte quand sélectionné    |
-| `primary`…           | `boolean`  | voir ↑  | Variantes de couleur                |
+| `secondary`…         | `boolean`  | voir ↑  | Variantes de couleur                |
 
 ---
 
