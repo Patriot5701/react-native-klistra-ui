@@ -9,7 +9,6 @@ type Props = {
     color?: string,
     background?: string,
     borderColor?: string,
-    primary?: boolean,
     secondary?: boolean,
     tertiary?: boolean,
     danger?: boolean,
@@ -18,7 +17,7 @@ type Props = {
     info?: boolean,
 }
 
-export const IconBadge = ({ name, size, color, background, borderColor, primary = true, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
+export const IconBadge = ({ name, size, color, background, borderColor, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const theme = useTheme();
     const backgroundColor = background || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
     const textColor = color || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;

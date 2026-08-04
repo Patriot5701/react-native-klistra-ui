@@ -9,7 +9,6 @@ type Props = {
     floating?: boolean;
     style?: Object;
     children?: ReactNode;
-    primary?: boolean;
     secondary?: boolean;
     tertiary?: boolean;
     danger?: boolean;
@@ -18,7 +17,7 @@ type Props = {
     info?: boolean;
 }
 
-export const Badge = ({ text, color, floating = false, style, children, primary = true, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
+export const Badge = ({ text, color, floating = false, style, children, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const styles = useStyles();
     const theme = useTheme();
 

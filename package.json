@@ -40,6 +40,9 @@
 		"!**/__fixtures__",
 		"!**/__mocks__"
 	],
+	"publishConfig": {
+		"main": "./lib/module/index.js"
+	},
 	"scripts": {
 		"prepare": "bob build",
 		"build": "bob build",

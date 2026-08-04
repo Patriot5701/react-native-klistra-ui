@@ -8,7 +8,6 @@ type Props = {
     step: number,
     nbSteps: number,
     width?: number
-    primary?: boolean,
     secondary?: boolean,
     tertiary?: boolean,
     danger?: boolean,
@@ -17,12 +16,12 @@ type Props = {
     info?: boolean,
 }
 
-export const Progress = ({ color, background, step, nbSteps, width, primary = true, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
+export const Progress = ({ color, background, step, nbSteps, width, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const theme = useTheme();
     const progressWidth = width ?? (useWindowDimensions().width - theme.padding - 2);
     const normalizedStep = Math.max(0, Math.min(step, nbSteps));
-    const backgroundColor = background || primary ? theme.primaryContrast : secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
-    const progressColor = color || primary ? theme.primary : secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
+    const backgroundColor = background || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
+    const progressColor = color || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
 
     const style = useAnimatedStyle(() => {
         const w = withTiming((normalizedStep * progressWidth) / nbSteps, { duration: 500 });

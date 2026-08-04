@@ -12,7 +12,6 @@ type Props = {
     onPress: ((event: GestureResponderEvent) => void | Promise<void>), 
     disabled? : boolean,
     icon?: string,
-    primary?: boolean,
     secondary?: boolean,
     tertiary?: boolean,
     danger?: boolean,
@@ -21,7 +20,7 @@ type Props = {
     info?: boolean,
 }
 
-export const Btn = ({ small = false, color, background, text, onPress, disabled = false, icon, primary = true, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
+export const Btn = ({ small = false, color, background, text, onPress, disabled = false, icon, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const [isLoading, setIsLoading] = useState(false);
     const styles = useStyles();
     const theme = useTheme();
