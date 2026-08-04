@@ -1,10 +1,5 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
-import {
-    lightTheme,
-    darkTheme,
-    type ThemeMode,
-    type ThemeVariables,
-} from "../styles/variables";
+import { lightTheme, darkTheme, type ThemeMode, type ThemeVariables} from "../styles/variables";
 
 type ThemeContextValue = {
     mode: ThemeMode;
