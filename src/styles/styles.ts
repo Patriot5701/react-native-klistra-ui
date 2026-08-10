@@ -3,6 +3,17 @@ import type { ThemeVariables } from "./variables";
 
 export const createStyles = (v: ThemeVariables) =>
     StyleSheet.create({
+        //Views
+        view: {
+            flex: 1,
+            height: '100%',
+            width: '100%',
+            paddingHorizontal: v.padding,
+            paddingTop: 64,
+            paddingBottom: v.padding * 2,
+            gap: v.gap,
+        },
+
         //Buttons
         button: {
             backgroundColor: v["text-body"],

@@ -3,6 +3,7 @@ import { SafeAreaView, ScrollView, Text, View,} from "react-native";
 import { Badge, Btn, Chip, Icon, IconBadge, Progress, ThemeProvider, useTheme, useThemeMode, type ThemeMode } from "./src";
 import { Accordion } from "@/elements/Accordion";
 import { Input } from "@/elements/TextInput";
+import { DatePicker } from "@/elements/DatePicker";
 
 function Playground() {
     const theme = useTheme();
@@ -74,6 +75,12 @@ function Playground() {
                 
                 <Icon name="settings" size={24} color={theme["text-body"]} />
 
+                <Text style={{ color: theme["text-secondary"], textAlign: "center" }}>
+                    DatePicker
+                </Text>
+
+                <DatePicker hasText hasIcon />
+
                 <Progress step={2} nbSteps={5} />
 
                 <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
@@ -93,7 +100,7 @@ function Playground() {
                 <Text style={{ color: theme["text-secondary"], textAlign: "center" }}>
                     Input
                 </Text>
-                <Input />
+                <Input placeholder="Entrez votre texte" />
 
                 <Text style={{ color: theme["text-secondary"], textAlign: "center" }}>
                     Accordions

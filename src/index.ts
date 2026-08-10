@@ -12,3 +12,4 @@ export { Chip } from "./elements/Chip";
 export { Input } from "./elements/TextInput";
 export { Accordion } from "./elements/Accordion";
 export { Card } from "./elements/Card";
+export { DatePicker } from "./elements/DatePicker";

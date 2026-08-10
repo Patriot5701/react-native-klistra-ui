@@ -88,6 +88,7 @@
 		]
 	},
 	"dependencies": {
-		"react-native-collapsible": "^1.6.2"
+		"react-native-collapsible": "^1.6.2",
+		"react-native-date-picker": "^5.0.13"
 	}
 }
