@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { Modal, Platform, Pressable, Text, View } from "react-native";
+import DateTimePicker, { type DateTimePickerChangeEvent } from "@react-native-community/datetimepicker";
 import { Btn } from "./Button";
 import { useTheme } from "../config/ThemeContext";
-import DatePickerComponent from "react-native-date-picker";
 
 type Props = {
     hasText?: boolean;
@@ -21,35 +22,55 @@ type Props = {
     small?: boolean;
 }
 
-export const DatePicker = ({ hasText = false, backgroundColor, textColor, initialDate = new Date(), onDateChange, onDateConfirm, hasIcon = true, secondary = false, tertiary = false, info = false, danger = false, warning = false, success = false, disabled = false, small = false }: Props) => {
+export const DatePicker = ({
+    hasText = false,
+    backgroundColor,
+    textColor,
+    initialDate = new Date(),
+    onDateChange,
+    onDateConfirm,
+    hasIcon = true,
+    secondary = false,
+    tertiary = false,
+    info = false,
+    danger = false,
+    warning = false,
+    success = false,
+    disabled = false,
+    small = false,
+}: Props) => {
     const [openPicker, setOpenPicker] = useState(false);
     const [date, setDate] = useState(initialDate);
-
     const theme = useTheme();
-    
+
     const bgColor = backgroundColor ?? (secondary ? theme.secondary : tertiary ? theme.tertiary : info ? theme.info : danger ? theme.danger : warning ? theme.warning : success ? theme.success : theme.primary);
     const textColorUsed = textColor ?? (secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : info ? theme.infoContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : theme.primaryContrast);
 
+    const applyDate = (selectedDate: Date, confirm: boolean) => {
+        setDate(selectedDate);
+        onDateChange?.(selectedDate);
+        if (confirm) {
+            onDateConfirm?.(selectedDate);
+        }
+    }
 
-    const handleDateChange = (selectedDate: Date) => {
-        setDate(selectedDate);
-        if (onDateChange) {
-            onDateChange(selectedDate);
-        }
-    }
-    const handleDateConfirm = (selectedDate: Date) => {
+    const handleChange = (event: DateTimePickerChangeEvent, selectedDate?: Date) => {
         setOpenPicker(false);
-        setDate(selectedDate);
-        if (onDateConfirm) {
-            onDateConfirm(selectedDate);
+        if (selectedDate) {
+            applyDate(selectedDate, Platform.OS === "android");
         }
     }
+
+    const handleConfirm = () => {
+        setOpenPicker(false);
+        applyDate(date, true);
+    }
+
     return (
         <>
-
-            <Btn 
-                icon={hasIcon ? "calendar" : undefined} 
-                text={hasText ? date.toLocaleDateString() : undefined} 
+            <Btn
+                icon={hasIcon ? "calendar" : undefined}
+                text={hasText ? date.toLocaleDateString("fr-FR") : undefined}
                 onPress={() => setOpenPicker(true)}
                 background={bgColor}
                 color={textColorUsed}
@@ -62,22 +83,62 @@ export const DatePicker = ({ hasText = false, backgroundColor, textColor, initia
                 warning={warning}
                 success={success}
             />
-            <DatePickerComponent
-                modal
-                open={openPicker}
-                date={date}
-                mode="date"
-                onDateChange={(selectedDate: Date) => {
-                    handleDateChange(selectedDate);
-                }}
-                locale="fr-FR"
-                theme="auto"
-                buttonColor={bgColor}
-                onConfirm={(selectedDate: Date) => {
-                    handleDateConfirm(selectedDate);
-                }}
-                onCancel={() => setOpenPicker(false)}
-            />
+
+            {openPicker && Platform.OS === "android" && (
+                <DateTimePicker
+                    value={date}
+                    mode="date"
+                    display="default"
+                    onValueChange={handleChange}
+                    locale="fr-FR"
+                />
+            )}
+
+            {Platform.OS === "ios" && (
+                <Modal
+                    visible={openPicker}
+                    transparent
+                    animationType="slide"
+                    onRequestClose={() => setOpenPicker(false)}
+                >
+                    <Pressable
+                        style={{ flex: 1, justifyContent: "flex-end", backgroundColor: "#00000066" }}
+                        onPress={() => setOpenPicker(false)}
+                    >
+                        <Pressable
+                            onPress={(e) => e.stopPropagation()}
+                            style={{
+                                backgroundColor: theme["bg-card"],
+                                borderTopLeftRadius: theme["border-radius"],
+                                borderTopRightRadius: theme["border-radius"],
+                                paddingBottom: theme.padding,
+                            }}
+                        >
+                            <View
+                                style={{
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    padding: theme.padding,
+                                }}
+                            >
+                                <Pressable onPress={() => setOpenPicker(false)}>
+                                    <Text style={{ color: theme["text-secondary"] }}>Annuler</Text>
+                                </Pressable>
+                                <Pressable onPress={handleConfirm}>
+                                    <Text style={{ color: bgColor, fontWeight: "600" }}>OK</Text>
+                                </Pressable>
+                            </View>
+                            <DateTimePicker
+                                value={date}
+                                mode="date"
+                                display="spinner"
+                                onValueChange={handleChange}
+                                locale="fr-FR"
+                            />
+                        </Pressable>
+                    </Pressable>
+                </Modal>
+            )}
         </>
     )
 }

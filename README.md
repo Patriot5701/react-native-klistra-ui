@@ -10,7 +10,7 @@ npm install react-native-klistra-ui
 
 Les peer dependencies (`react`, `react-native`, `react-native-reanimated`, `react-native-worklets`, `@expo/vector-icons`) sont en général installées automatiquement (npm 7+). Ajoutez-les manuellement seulement si votre gestionnaire de paquets vous le demande.
 
-`react-native-collapsible` et `react-native-date-picker` sont des dépendances de la lib (installées avec le package).
+`react-native-collapsible` et `@react-native-community/datetimepicker` sont des dépendances de la lib (installées avec le package).
 
 ### Développement local
 
@@ -334,7 +334,7 @@ Conteneur stylé (`bg-card`, padding, radius, ombre légère selon les styles du
 
 ### `DatePicker`
 
-Bouton qui ouvre un modal de date (`react-native-date-picker`). Variantes de couleur comme `Btn`.
+Bouton qui ouvre le sélecteur de date natif (`@react-native-community/datetimepicker`). Variantes de couleur comme `Btn`.
 
 ```tsx
 <DatePicker

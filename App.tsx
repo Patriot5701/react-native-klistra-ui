@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { SafeAreaView, ScrollView, Text, View,} from "react-native";
+import { ScrollView, Text, View,} from "react-native";
 import { Accordion, Badge, Btn, Chip, DatePicker, Icon, IconBadge, Input, Progress, ThemeProvider, useTheme, useThemeMode, type ThemeMode } from "./src";
 
 function Playground() {
@@ -8,7 +8,7 @@ function Playground() {
     const [selected, setSelected] = useState("all");
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: theme["bg-body"], paddingVertical: 64 }}>
+        <View style={{ flex: 1, backgroundColor: theme["bg-body"], paddingVertical: 64 }}>
             <ScrollView contentContainerStyle={{ padding: theme.padding, gap: theme.gap, }} >
                 <Text style={{ color: theme["text-body"], fontSize: 22, fontWeight: "700", textAlign: "center" }} >
                     Klistra UI
@@ -76,7 +76,9 @@ function Playground() {
                     DatePicker
                 </Text>
 
-                <DatePicker hasText hasIcon />
+                <View style={{ flexDirection: "row", gap: theme.gap, alignItems: "center" }}>
+                    <DatePicker hasText hasIcon />
+                </View>
 
                 <Progress step={2} nbSteps={5} />
 
@@ -107,7 +109,7 @@ function Playground() {
                     <Text style={{ color: theme["text-body"] }}>Content 1</Text>
                 </Accordion>
             </ScrollView>
-        </SafeAreaView>
+        </View>
     );
 }
 
@@ -118,7 +120,7 @@ export default function App() {
         <ThemeProvider mode={mode}>
             <View style={{ flex: 1 }}>
                 <Playground />
-                <SafeAreaView>
+                <View>
                     <View style={{ padding: 32, alignItems: "center" }}>
                         <Btn
                             onPress={() =>
@@ -127,7 +129,7 @@ export default function App() {
                             text={`Toggle ${mode === "light" ? "dark" : "light"}`}
                         />
                     </View>
-                </SafeAreaView>
+                </View>
             </View>
         </ThemeProvider>
     );

@@ -72,8 +72,8 @@
 		"typescript": "^5.8.0"
 	},
 	"dependencies": {
-		"react-native-collapsible": "^1.6.2",
-		"react-native-date-picker": "^5.0.13"
+		"@react-native-community/datetimepicker": "9.1.0",
+		"react-native-collapsible": "^1.6.2"
 	},
 	"overrides": {
 		"uuid": "^11.1.1",
