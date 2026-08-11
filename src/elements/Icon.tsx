@@ -1,9 +1,44 @@
-import { useTheme } from "@/config/ThemeContext";
+import { useTheme } from "../config/ThemeContext";
 import { AntDesign, Entypo, Feather, FontAwesome, FontAwesome5, Ionicons, MaterialIcons } from "@expo/vector-icons";
 import type { StyleProp, TextStyle } from "react-native";
 
+export type IconName =
+    | "add"
+    | "alert"
+    | "brand"
+    | "calendar"
+    | "car"
+    | "close"
+    | "driver"
+    | "exit"
+    | "left"
+    | "menu"
+    | "minus"
+    | "money"
+    | "pin"
+    | "rankings"
+    | "return"
+    | "right"
+    | "stats"
+    | "building"
+    | "front-wing"
+    | "rear-wing"
+    | "suspension"
+    | "flanks"
+    | "flat-bottom"
+    | "disc"
+    | "arrow-up"
+    | "arrow-down"
+    | "question-circle"
+    | "caret-down-sharp"
+    | "settings"
+    | "wrench"
+    | "dashboard"
+    | "wind"
+    | "chassis";
+
 type Props = {
-    name: string,
+    name: IconName,
     size: number,
     color?: string,
     style?: StyleProp<TextStyle>,
@@ -12,7 +47,7 @@ type Props = {
 export const Icon = ({ name, size, color, style }: Props) => {
     const theme = useTheme();
     const iconColor = color ?? theme['text-body'];
-    switch(name) {
+    switch (name) {
         case "add":
             return <FontAwesome name="plus" size={size} color={iconColor} style={style} />
         case "alert":
@@ -79,7 +114,5 @@ export const Icon = ({ name, size, color, style }: Props) => {
             return <Feather name="wind" size={size} color={iconColor} style={style} />
         case "chassis":
             return <MaterialIcons name="view-in-ar" size={size} color={iconColor} style={style} />
-        default:
-            return <Ionicons name="ellipse" size={size} color={iconColor} style={style} />
     }
 }

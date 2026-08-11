@@ -21,10 +21,7 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "ESNext",
-        "verbatimModuleSyntax": true,
-        "paths": {
-            "@/*": ["./src/*"]
-        }
+        "verbatimModuleSyntax": true
     },
     "include": [
         "src",

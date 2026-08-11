@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Btn } from "./Button";
-import { useTheme } from "@/config/ThemeContext";
+import { useTheme } from "../config/ThemeContext";
 import DatePickerComponent from "react-native-date-picker";
 
 type Props = {
@@ -9,6 +9,7 @@ type Props = {
     textColor?: string;
     initialDate?: Date;
     onDateChange?: (date: Date) => void;
+    onDateConfirm?: (date: Date) => void;
     hasIcon?: boolean;
     secondary?: boolean;
     tertiary?: boolean;
@@ -20,15 +21,29 @@ type Props = {
     small?: boolean;
 }
 
-export const DatePicker = ({ hasText = false, backgroundColor, textColor, initialDate = new Date(), onDateChange, hasIcon = true, secondary = false, tertiary = false, info = false, danger = false, warning = false, success = false, disabled = false, small = false }: Props) => {
+export const DatePicker = ({ hasText = false, backgroundColor, textColor, initialDate = new Date(), onDateChange, onDateConfirm, hasIcon = true, secondary = false, tertiary = false, info = false, danger = false, warning = false, success = false, disabled = false, small = false }: Props) => {
     const [openPicker, setOpenPicker] = useState(false);
     const [date, setDate] = useState(initialDate);
 
     const theme = useTheme();
     
-    const bgColor = backgroundColor || secondary ? theme.secondary : tertiary ? theme.tertiary : info ? theme.info : danger ? theme.danger : warning ? theme.warning : success ? theme.success : theme.primary;
-    const textColorUsed = textColor || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : info ? theme.infoContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : theme.primaryContrast;
+    const bgColor = backgroundColor ?? (secondary ? theme.secondary : tertiary ? theme.tertiary : info ? theme.info : danger ? theme.danger : warning ? theme.warning : success ? theme.success : theme.primary);
+    const textColorUsed = textColor ?? (secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : info ? theme.infoContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : theme.primaryContrast);
 
+
+    const handleDateChange = (selectedDate: Date) => {
+        setDate(selectedDate);
+        if (onDateChange) {
+            onDateChange(selectedDate);
+        }
+    }
+    const handleDateConfirm = (selectedDate: Date) => {
+        setOpenPicker(false);
+        setDate(selectedDate);
+        if (onDateConfirm) {
+            onDateConfirm(selectedDate);
+        }
+    }
     return (
         <>
 
@@ -53,17 +68,13 @@ export const DatePicker = ({ hasText = false, backgroundColor, textColor, initia
                 date={date}
                 mode="date"
                 onDateChange={(selectedDate: Date) => {
-                    setDate(selectedDate);
-                    if (onDateChange) {
-                        onDateChange(selectedDate);
-                    }
+                    handleDateChange(selectedDate);
                 }}
                 locale="fr-FR"
                 theme="auto"
                 buttonColor={bgColor}
                 onConfirm={(selectedDate: Date) => {
-                    setOpenPicker(false);
-                    setDate(selectedDate);
+                    handleDateConfirm(selectedDate);
                 }}
                 onCancel={() => setOpenPicker(false)}
             />

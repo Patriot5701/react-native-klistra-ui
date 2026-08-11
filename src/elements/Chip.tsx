@@ -19,8 +19,8 @@ type Props = {
 export const Chip = ({ isSelected, text, selectedBackground, selectedColor, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false, onPress }: Props) => {
     const styles = useStyles();
     const theme = useTheme();
-    const selectedBackgroundColor = selectedBackground || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
-    const selectedTextColor = selectedColor || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
+    const selectedBackgroundColor = selectedBackground ?? (secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary);
+    const selectedTextColor = selectedColor ?? (secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast);
     return (
         <TouchableOpacity style={[styles.chip, isSelected && { backgroundColor: selectedBackgroundColor, borderColor: selectedBackgroundColor }]} onPress={onPress}>
             <Text style={[styles.chipText, isSelected && { color: selectedTextColor }]}>{text}</Text>

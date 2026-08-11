@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { SafeAreaView, ScrollView, Text, View,} from "react-native";
-import { Badge, Btn, Chip, Icon, IconBadge, Progress, ThemeProvider, useTheme, useThemeMode, type ThemeMode } from "./src";
-import { Accordion } from "@/elements/Accordion";
-import { Input } from "@/elements/TextInput";
-import { DatePicker } from "@/elements/DatePicker";
+import { Accordion, Badge, Btn, Chip, DatePicker, Icon, IconBadge, Input, Progress, ThemeProvider, useTheme, useThemeMode, type ThemeMode } from "./src";
 
 function Playground() {
     const theme = useTheme();

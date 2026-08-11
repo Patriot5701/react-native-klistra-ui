@@ -5,11 +5,11 @@ export { useStyles } from "./styles/useStyles";
 
 export { Btn } from "./elements/Button";
 export { Badge } from "./elements/Badge";
-export { Icon } from "./elements/Icon";
+export { Icon, type IconName } from "./elements/Icon";
 export { IconBadge } from "./elements/IconBadge";
 export { Progress } from "./elements/Progress";
 export { Chip } from "./elements/Chip";
-export { Input } from "./elements/TextInput";
+export { Input } from "./elements/Input";
 export { Accordion } from "./elements/Accordion";
 export { Card } from "./elements/Card";
 export { DatePicker } from "./elements/DatePicker";

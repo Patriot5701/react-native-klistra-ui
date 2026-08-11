@@ -11,6 +11,7 @@ type MakePropsOptional<T> = {
 
 interface Props {
     expanded?: boolean | null;
+    onToggle?: (open: boolean) => void;
     initExpanded?: boolean;
     duration?: number;
     collapsibleProps?: MakePropsOptional<CollapsibleProps>;
@@ -19,96 +20,100 @@ interface Props {
     title?: string | React.ReactNode;
     noArrow?: boolean;
     unmountOnCollapse?: boolean;
-    collapsableBackgroundColor?: string;
-    collapsableTextColor?: string;
+    collapsibleBackgroundColor?: string;
+    collapsibleTextColor?: string;
 }
 
-export const Accordion = ({ children, expanded = null, unmountOnCollapse = false, noArrow = false, initExpanded = false, title = "", duration = 300, collapsibleProps = {}, TouchableComponent = TouchableOpacity, collapsableBackgroundColor, collapsableTextColor }: Props) => {
+export const Accordion = ({
+    children,
+    expanded = null,
+    onToggle,
+    unmountOnCollapse = false,
+    noArrow = false,
+    initExpanded = false,
+    title = "",
+    duration = 300,
+    collapsibleProps = {},
+    TouchableComponent = TouchableOpacity,
+    collapsibleBackgroundColor,
+    collapsibleTextColor,
+}: Props) => {
     const styles = useStyles();
     const theme = useTheme();
-    const collapsableBg = collapsableBackgroundColor ?? theme["bg-card"];
-    const collapsableColor = collapsableTextColor ?? theme["text-body"];
+    const collapsibleBg = collapsibleBackgroundColor ?? theme["bg-card"];
+    const collapsibleColor = collapsibleTextColor ?? theme["text-body"];
 
-    let controlled = expanded !== null;
-    const [show, setShow] = useState(initExpanded);
-    const [mounted, setMounted] = useState(initExpanded);
+    const controlled = expanded !== null;
+    const [uncontrolledOpen, setUncontrolledOpen] = useState(initExpanded);
+    const open = controlled ? !!expanded : uncontrolledOpen;
 
-    const rotateAnim = useRef(new Animated.Value(0)).current;
-
-    if(controlled && !mounted && expanded) setMounted(true);
-    
-    const handleArrowRotate = (open: boolean | null = null) => {
-        const _open = open === null ? show : open;
-        Animated.timing(rotateAnim, {
-            toValue: _open ? rotateAngle : 0,
-            duration,
-            easing: Easing.ease,
-            useNativeDriver: false,
-        }).start();
-    }
-
-    const handleAnimationEnd = () => {
-        if (unmountOnCollapse && !show) setMounted(false);
-    };
-
-    const handleToggleShow = () => {
-        if (!controlled)
-            if (!mounted) {
-                if (!show) setMounted(true);
-            } else {
-                setShow(!show);
-            }
-    };
+    // Monté tant que ouvert ; avec unmountOnCollapse, reste jusqu’à la fin de l’anim.
+    const [mounted, setMounted] = useState(() => open || !unmountOnCollapse);
 
     const rotateAngle = 180;
+    const rotateAnim = useRef(new Animated.Value(open ? rotateAngle : 0)).current;
     const rotateAnimDeg = rotateAnim.interpolate({
         inputRange: [0, 180],
         outputRange: ["0deg", "180deg"],
     });
 
     useEffect(() => {
-        if (mounted) {
-          setShow(true);
+        if (open) {
+            setMounted(true);
+        } else if (!unmountOnCollapse) {
+            setMounted(true);
         }
-    }, [mounted]);
+    }, [open, unmountOnCollapse]);
 
     useEffect(() => {
-        rotateAnim.setValue(show ? rotateAngle : 0);
-    }, []);
+        Animated.timing(rotateAnim, {
+            toValue: open ? rotateAngle : 0,
+            duration,
+            easing: Easing.ease,
+            useNativeDriver: false,
+        }).start();
+    }, [open, duration, rotateAnim]);
 
-    useEffect(() => {
-        if (mounted) handleArrowRotate(show);
-    }, [show, mounted]);
+    const handleAnimationEnd = () => {
+        if (unmountOnCollapse && !open) {
+            setMounted(false);
+        }
+    };
 
-    useEffect(() => {
-        if (controlled && show !== expanded) setShow(!!expanded);
-    }, [controlled, expanded, show]);
+    const handleToggle = () => {
+        const next = !open;
+        if (!controlled) {
+            setUncontrolledOpen(next);
+        }
+        onToggle?.(next);
+    };
 
-    const HeaderElement = typeof title === "string" ? <Text style={[{ color: collapsableColor }]}>{title}</Text> : title;
+    const HeaderElement = typeof title === "string"
+        ? <Text style={[{ color: collapsibleColor }]}>{title}</Text>
+        : title;
 
     return (
-        <TouchableComponent style={[styles.card, { backgroundColor: collapsableBg }]} onPress={handleToggleShow}>
+        <TouchableComponent style={[styles.card, { backgroundColor: collapsibleBg }]} onPress={handleToggle}>
             <View>
                 {HeaderElement}
                 {
                     noArrow ? null : (
-                        <Animated.View style={[{ transform: [{ rotate: rotateAnimDeg}], position: 'absolute', top: theme.padding / 2.0, right: theme.padding / 2.0}, show && { bottom: 4}]}>
-                            <Icon name="caret-down-sharp" size={12} color={collapsableColor} />
+                        <Animated.View style={[{ transform: [{ rotate: rotateAnimDeg }], position: "absolute", top: theme.padding / 2.0, right: theme.padding / 2.0 }, open && { bottom: 4 }]}>
+                            <Icon name="caret-down-sharp" size={12} color={collapsibleColor} />
                         </Animated.View>
                     )
                 }
             </View>
-            <View style={{ width: '100%'}}>
-                <View style={[{ width: '100%', borderWidth: 0, borderTopRightRadius: 0, borderTopLeftRadius: 0}, show && { paddingBottom: 16}]}>
-                {
-                    mounted &&
-                    <Collapsible onAnimationEnd={handleAnimationEnd} collapsed={!show} {...{duration, ...collapsibleProps}}>
-                        {children}
-                    </Collapsible>
-                }
+            <View style={{ width: "100%" }}>
+                <View style={[{ width: "100%", borderWidth: 0, borderTopRightRadius: 0, borderTopLeftRadius: 0 }, open && { paddingBottom: 16 }]}>
+                    {
+                        mounted &&
+                        <Collapsible onAnimationEnd={handleAnimationEnd} collapsed={!open} {...{ duration, ...collapsibleProps }}>
+                            {children}
+                        </Collapsible>
+                    }
                 </View>
             </View>
         </TouchableComponent>
-    )
-
+    );
 }

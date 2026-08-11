@@ -2,7 +2,7 @@ import { ActivityIndicator, Text, TouchableOpacity, type GestureResponderEvent }
 import { useState } from "react";
 import { useTheme } from "../config/ThemeContext";
 import { useStyles } from "../styles/useStyles";
-import { Icon } from "./Icon";
+import { Icon, type IconName } from "./Icon";
 
 type Props = {
     small?: boolean,
@@ -11,7 +11,7 @@ type Props = {
     text?: string, 
     onPress: ((event: GestureResponderEvent) => void | Promise<void>), 
     disabled? : boolean,
-    icon?: string,
+    icon?: IconName,
     secondary?: boolean,
     tertiary?: boolean,
     danger?: boolean,
@@ -24,8 +24,8 @@ export const Btn = ({ small = false, color, background, text, onPress, disabled 
     const [isLoading, setIsLoading] = useState(false);
     const styles = useStyles();
     const theme = useTheme();
-    const backgroundColor = background || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
-    const textColor = color || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
+    const backgroundColor = background ?? (secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary);
+    const textColor = color ?? (secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast);
 
     const onBtnPressed = async (event: GestureResponderEvent) => {
         if (disabled || isLoading) {

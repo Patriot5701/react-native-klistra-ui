@@ -1,10 +1,10 @@
 import { View } from "react-native"
 import { useStyles } from "../styles/useStyles"
-import { Icon } from "./Icon"
+import { Icon, type IconName } from "./Icon"
 import { useTheme } from "../config/ThemeContext";
 
 type Props = {
-    name: string,
+    name: IconName,
     size: number,
     color?: string,
     background?: string,
@@ -19,8 +19,8 @@ type Props = {
 
 export const IconBadge = ({ name, size, color, background, borderColor, secondary = false, tertiary = false, danger = false, warning = false, success = false, info = false }: Props) => {
     const theme = useTheme();
-    const backgroundColor = background || secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary;
-    const textColor = color || secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast;
+    const backgroundColor = background ?? (secondary ? theme.secondary : tertiary ? theme.tertiary : danger ? theme.danger : warning ? theme.warning : success ? theme.success : info ? theme.info : theme.primary);
+    const textColor = color ?? (secondary ? theme.secondaryContrast : tertiary ? theme.tertiaryContrast : danger ? theme.dangerContrast : warning ? theme.warningContrast : success ? theme.successContrast : info ? theme.infoContrast : theme.primaryContrast);
     const styles = useStyles();
     return (
         <View style={[styles.icon, borderColor && { borderColor: borderColor, borderWidth: 1, padding: 4}, backgroundColor && { backgroundColor: backgroundColor }]}>
