@@ -8,7 +8,9 @@ Librairie de composants React Native avec thème light / dark personnalisable.
 npm install react-native-klistra-ui
 ```
 
-Les peer dependencies (`react`, `react-native`, `react-native-reanimated`, `react-native-worklets`, `@expo/vector-icons`) sont en général installées automatiquement (npm 7+). Ajoute-les manuellement seulement si ton gestionnaire de paquets te le demande.
+Les peer dependencies (`react`, `react-native`, `react-native-reanimated`, `react-native-worklets`, `@expo/vector-icons`) sont en général installées automatiquement (npm 7+). Ajoutez-les manuellement seulement si votre gestionnaire de paquets vous le demande.
+
+`react-native-collapsible` et `react-native-date-picker` sont des dépendances de la lib (installées avec le package).
 
 ### Développement local
 
@@ -53,6 +55,8 @@ import {
   Input,
   Accordion,
   Card,
+  DatePicker,
+  type IconName,
 } from "react-native-klistra-ui";
 
 export default function App() {
@@ -66,6 +70,11 @@ export default function App() {
       <IconBadge name="alert" size={16} warning />
       <Progress step={2} nbSteps={5} />
       <Chip text="Filtre" isSelected onPress={() => {}} />
+      <Input placeholder="Email" />
+      <Accordion title="Détails">
+        <Badge text="Contenu" />
+      </Accordion>
+      <DatePicker hasText hasIcon />
     </ThemeProvider>
   );
 }
@@ -73,7 +82,7 @@ export default function App() {
 
 ### Variantes de couleur
 
-`Btn`, `Badge`, `IconBadge`, `Progress` et `Chip` acceptent les mêmes flags de variante, basés sur les tokens du thème. Sans flag, la variante **primary** s’applique.
+`Btn`, `Badge`, `IconBadge`, `Progress`, `Chip` et `DatePicker` acceptent les mêmes flags de variante, basés sur les tokens du thème. Sans flag, la variante **primary** s’applique.
 
 | Prop        | Défaut  | Token utilisé                                          |
 |-------------|---------|--------------------------------------------------------|
@@ -85,7 +94,7 @@ export default function App() {
 | `success`   | `false` | `success`                                              |
 | `info`      | `false` | `info`                                                 |
 
-Passer une seule variante à `true` (ex. `danger`). Tu peux aussi forcer des couleurs custom via `color` / `background` quand c’est supporté.
+Passer une seule variante à `true` (ex. `danger`). Vous pouvez aussi forcer des couleurs custom via `color` / `background` quand c’est supporté.
 
 ---
 
@@ -106,7 +115,7 @@ Bouton tactile avec état de chargement automatique. Pendant `onPress` (y compri
 |--------------|------------------------------------|---------|--------------------------------------------------|
 | `onPress`    | `(event) => void \| Promise<void>` | —       | Callback au tap (sync ou async)                  |
 | `text`       | `string`                           | —       | Libellé (uppercase via les styles)               |
-| `icon`       | `string`                           | —       | Nom d’icône (voir `Icon`)                        |
+| `icon`       | `IconName`                         | —       | Nom d’icône typé (voir `Icon`)                   |
 | `color`      | `string`                           | —       | Override couleur texte / icône / loader          |
 | `background` | `string`                           | —       | Override couleur de fond                         |
 | `small`      | `boolean`                          | `false` | Variante compacte                                |
@@ -117,7 +126,7 @@ Bouton tactile avec état de chargement automatique. Pendant `onPress` (y compri
 
 ### `Badge`
 
-Petit label coloré. Le fond est la couleur de variante (ou `color`) avec transparence (`+'1A'`). Peut afficher un texte ou des `children`. Avec `floating`, position absolute (coin haut-droit).
+Petit label coloré. Le fond est la couleur de variante (ou `color`) avec ~10 % d’opacité. Gère `#RGB` / `#RRGGBB` / `#RRGGBBAA` et `rgb` / `rgba` (un alpha déjà présent est remplacé). Peut afficher un texte ou des `children`. Avec `floating`, position absolute (coin haut-droit).
 
 ```tsx
 <Badge text="Nouveau" />
@@ -129,34 +138,37 @@ Petit label coloré. Le fond est la couleur de variante (ou `color`) avec transp
 </Badge>
 ```
 
-| Prop       | Type               | Défaut  | Description                                    |
-|------------|--------------------|---------|------------------------------------------------|
-| `text`     | `string \| number` | —       | Contenu texte (ignoré si `children`)           |
-| `color`    | `string`           | —       | Override couleur texte / base du fond          |
-| `floating` | `boolean`          | `false` | Position absolute (haut-droite)                |
-| `style`    | `Object`           | —       | Styles additionnels                            |
-| `children` | `ReactNode`        | —       | Contenu custom                                 |
-| `secondary`… | `boolean`          | voir ↑  | Variantes de couleur                           |
+| Prop         | Type               | Défaut  | Description                          |
+|--------------|--------------------|---------|--------------------------------------|
+| `text`       | `string \| number` | —       | Contenu texte (ignoré si `children`) |
+| `color`      | `string`           | —       | Override couleur texte / base du fond|
+| `floating`   | `boolean`          | `false` | Position absolute (haut-droite)      |
+| `style`      | `Object`           | —       | Styles additionnels                  |
+| `children`   | `ReactNode`        | —       | Contenu custom                       |
+| `secondary`… | `boolean`          | voir ↑  | Variantes de couleur                 |
 
 ---
 
 ### `Icon`
 
-Icône unifiée basée sur `@expo/vector-icons`. Un nom logique est mappé vers la bonne famille. Un nom inconnu affiche un point (`ellipse`).
+Icône unifiée basée sur `@expo/vector-icons`. Un nom logique (`IconName`) est mappé vers la bonne famille. Le type est exporté pour `Btn`, `IconBadge`, etc. — un nom invalide ne compile pas.
 
 ```tsx
-<Icon name="settings" size={24} color="#1e1e1e" />
+import { Icon, type IconName } from "react-native-klistra-ui";
+
+const name: IconName = "settings";
+<Icon name={name} size={24} color="#1e1e1e" />
 <Icon name="add" size={16} color="#004999" />
 ```
 
 | Prop    | Type                   | Défaut | Description                    |
 |---------|------------------------|--------|--------------------------------|
-| `name`  | `string`               | —      | Identifiant logique de l’icône |
+| `name`  | `IconName`             | —      | Identifiant logique de l’icône |
 | `size`  | `number`               | —      | Taille en pixels               |
-| `color` | `string`               | —      | Couleur                        |
+| `color` | `string`               | —      | Couleur (défaut : `text-body`) |
 | `style` | `StyleProp<TextStyle>` | —      | Style additionnel              |
 
-**Noms disponibles :** `add`, `alert`, `brand`, `calendar`, `car`, `close`, `driver`, `exit`, `left`, `menu`, `minus`, `money`, `rankings`, `return`, `right`, `stats`, `building`, `front-wing`, `rear-wing`, `suspension`, `flanks`, `flat-bottom`, `disc`, `arrow-up`, `arrow-down`, `question-circle`, `caret-down-sharp`, `settings`, `wrench`, `dashboard`, `wind`, `chassis`.
+**Noms disponibles (`IconName`) :** `add`, `alert`, `brand`, `calendar`, `car`, `close`, `driver`, `exit`, `left`, `menu`, `minus`, `money`, `pin`, `rankings`, `return`, `right`, `stats`, `building`, `front-wing`, `rear-wing`, `suspension`, `flanks`, `flat-bottom`, `disc`, `arrow-up`, `arrow-down`, `question-circle`, `caret-down-sharp`, `settings`, `wrench`, `dashboard`, `wind`, `chassis`.
 
 ---
 
@@ -170,20 +182,20 @@ Icône dans un conteneur circulaire coloré selon la variante du thème. Optionn
 <IconBadge name="add" size={16} color="#fff" background="#111" />
 ```
 
-| Prop         | Type     | Défaut | Description                          |
-|--------------|----------|--------|--------------------------------------|
-| `name`       | `string` | —      | Nom d’icône (voir `Icon`)            |
-| `size`       | `number` | —      | Taille de l’icône                    |
-| `color`      | `string` | —      | Override couleur de l’icône          |
-| `background` | `string` | —      | Override couleur de fond             |
-| `borderColor`| `string` | —      | Si défini, ajoute une bordure de 1px |
-| `secondary`… | `boolean`| voir ↑ | Variantes de couleur                 |
+| Prop          | Type       | Défaut | Description                          |
+|---------------|------------|--------|--------------------------------------|
+| `name`        | `IconName` | —      | Nom d’icône (voir `Icon`)            |
+| `size`        | `number`   | —      | Taille de l’icône                    |
+| `color`       | `string`   | —      | Override couleur de l’icône          |
+| `background`  | `string`   | —      | Override couleur de fond             |
+| `borderColor` | `string`   | —      | Si défini, ajoute une bordure de 1px |
+| `secondary`…  | `boolean`  | voir ↑ | Variantes de couleur                 |
 
 ---
 
 ### `Progress`
 
-Barre de progression animée (Reanimated). Remplissage = `step / nbSteps`. Sans `width`, largeur = écran − `padding` du thème. La barre utilise la variante ; le fond utilise le contraste associé.
+Barre de progression animée (Reanimated). Remplissage = `step / nbSteps`. Si `nbSteps <= 0`, la barre reste à largeur nulle (pas de division par zéro). Sans `width`, largeur = écran − `padding` du thème. La barre utilise la variante ; le fond utilise le contraste associé.
 
 ```tsx
 <Progress step={2} nbSteps={5} />
@@ -222,14 +234,131 @@ const [selected, setSelected] = useState("all");
 />
 ```
 
-| Prop                 | Type       | Défaut  | Description                         |
-|----------------------|------------|---------|-------------------------------------|
-| `text`               | `string`   | —       | Libellé                             |
-| `isSelected`         | `boolean`  | —       | État sélectionné                    |
-| `onPress`            | `() => void` | —     | Callback au tap                     |
-| `selectedBackground` | `string`   | —       | Override fond quand sélectionné     |
-| `selectedColor`      | `string`   | —       | Override texte quand sélectionné    |
-| `secondary`…         | `boolean`  | voir ↑  | Variantes de couleur                |
+| Prop                 | Type         | Défaut  | Description                         |
+|----------------------|--------------|---------|-------------------------------------|
+| `text`               | `string`     | —       | Libellé                             |
+| `isSelected`         | `boolean`    | —       | État sélectionné                    |
+| `onPress`            | `() => void` | —       | Callback au tap                     |
+| `selectedBackground` | `string`     | —       | Override fond quand sélectionné     |
+| `selectedColor`      | `string`     | —       | Override texte quand sélectionné    |
+| `secondary`…         | `boolean`    | voir ↑  | Variantes de couleur                |
+
+---
+
+### `Input`
+
+Champ texte stylé avec le thème (`bg-form`, bordure, `text-disabled` pour le placeholder).
+
+```tsx
+const [value, setValue] = useState("");
+
+<Input
+  placeholder="Email"
+  value={value}
+  onChangeText={setValue}
+  onSubmitEditing={() => {}}
+/>
+```
+
+| Prop               | Type                                  | Défaut | Description              |
+|--------------------|---------------------------------------|--------|--------------------------|
+| `placeholder`      | `string`                              | —      | Placeholder              |
+| `value`            | `string`                              | —      | Valeur contrôlée         |
+| `onChangeText`     | `(text: string) => void`              | —      | Callback de saisie       |
+| `onBlur`           | `() => void`                          | —      | Perte de focus           |
+| `onFocus`          | `() => void`                          | —      | Prise de focus           |
+| `onSubmitEditing`  | `() => void`                          | —      | Validation clavier       |
+| `onEndEditing`     | `() => void`                          | —      | Fin d’édition            |
+| `onSelectionChange`| `(event: TextInputSelectionChangeEvent) => void` | — | Changement de sélection |
+
+---
+
+### `Accordion`
+
+Panneau repliable. **Non contrôlé** par défaut (`initExpanded`). **Contrôlé** si `expanded` est fourni (`true` / `false`) — utilise alors `onToggle` pour mettre à jour l’état parent. Avec `unmountOnCollapse`, le contenu est démonté après l’animation de fermeture.
+
+```tsx
+// Non contrôlé
+<Accordion title="Détails" initExpanded>
+  <Text>Contenu</Text>
+</Accordion>
+
+// Contrôlé
+const [open, setOpen] = useState(false);
+
+<Accordion title="Détails" expanded={open} onToggle={setOpen}>
+  <Text>Contenu</Text>
+</Accordion>
+```
+
+| Prop                         | Type                         | Défaut             | Description                                      |
+|------------------------------|------------------------------|--------------------|--------------------------------------------------|
+| `children`                   | `ReactNode`                  | —                  | Contenu du panneau                               |
+| `title`                      | `string \| ReactNode`        | `""`               | En-tête                                          |
+| `expanded`                   | `boolean \| null`            | `null`             | Mode contrôlé si non `null`                      |
+| `onToggle`                   | `(open: boolean) => void`    | —                  | Notifié à chaque toggle (requis en contrôlé)     |
+| `initExpanded`               | `boolean`                    | `false`            | Ouvert au montage (mode non contrôlé)            |
+| `duration`                   | `number`                     | `300`              | Durée d’animation (ms)                           |
+| `noArrow`                    | `boolean`                    | `false`            | Cache la flèche                                  |
+| `unmountOnCollapse`          | `boolean`                    | `false`            | Démonte le contenu une fois replié               |
+| `collapsibleBackgroundColor` | `string`                     | `bg-card`          | Fond de l’en-tête / carte                        |
+| `collapsibleTextColor`       | `string`                     | `text-body`        | Couleur du titre / flèche                        |
+| `collapsibleProps`           | `Partial<CollapsibleProps>`  | `{}`               | Props passées à `react-native-collapsible`       |
+| `TouchableComponent`         | `ComponentType`              | `TouchableOpacity` | Composant tactile de l’en-tête                   |
+
+---
+
+### `Card`
+
+Conteneur stylé (`bg-card`, padding, radius, ombre légère selon les styles du thème).
+
+```tsx
+<Card>
+  <Badge text="Info" info />
+  <Btn text="OK" onPress={() => {}} />
+</Card>
+
+<Card direction="row" style={{ gap: 8 }}>
+  <Icon name="settings" size={20} />
+  <Badge text="Réglages" />
+</Card>
+```
+
+| Prop        | Type                    | Défaut     | Description            |
+|-------------|-------------------------|------------|------------------------|
+| `children`  | `ReactNode`             | —          | Contenu                |
+| `direction` | `"row" \| "column"`     | `"column"` | `flexDirection`        |
+| `style`     | `StyleProp<ViewStyle>`  | —          | Styles additionnels    |
+
+---
+
+### `DatePicker`
+
+Bouton qui ouvre un modal de date (`react-native-date-picker`). Variantes de couleur comme `Btn`.
+
+```tsx
+<DatePicker
+  hasText
+  hasIcon
+  initialDate={new Date()}
+  onDateChange={(date) => console.log(date)}
+  onDateConfirm={(date) => console.log("confirm", date)}
+/>
+<DatePicker hasText secondary small />
+```
+
+| Prop              | Type                   | Défaut       | Description                              |
+|-------------------|------------------------|--------------|------------------------------------------|
+| `hasText`         | `boolean`              | `false`      | Affiche la date formatée sur le bouton   |
+| `hasIcon`         | `boolean`              | `true`       | Affiche l’icône `calendar`               |
+| `initialDate`     | `Date`                 | `new Date()` | Date initiale                            |
+| `onDateChange`    | `(date: Date) => void` | —            | Pendant le scroll du picker              |
+| `onDateConfirm`   | `(date: Date) => void` | —            | À la confirmation                        |
+| `backgroundColor` | `string`               | —            | Override fond du bouton                  |
+| `textColor`       | `string`               | —            | Override texte / icône                   |
+| `disabled`        | `boolean`              | `false`      | Désactive le bouton                      |
+| `small`           | `boolean`              | `false`      | Bouton compact                           |
+| `secondary`…      | `boolean`              | voir ↑       | Variantes de couleur                     |
 
 ---
 
@@ -373,6 +502,7 @@ function MyScreen() {
 | `bg-body`        | `string` | Fond principal   |
 | `bg-secondary`   | `string` | Fond secondaire  |
 | `bg-card`        | `string` | Fond carte       |
+| `bg-form`        | `string` | Fond des champs  |
 | `text-body`      | `string` | Texte principal  |
 | `text-secondary` | `string` | Texte secondaire |
 | `text-disabled`  | `string` | Texte désactivé  |
@@ -402,6 +532,7 @@ Les thèmes de base sont aussi exportés (`lightTheme`, `darkTheme`).
 | `useStyles()`     | Styles générés à partir du thème actif |
 | `ThemeVariables`  | Type TypeScript des tokens             |
 | `ThemeMode`       | Type `"light" \| "dark"`               |
+| `IconName`        | Union des noms d’icônes valides        |
 
 ## Licence
 
