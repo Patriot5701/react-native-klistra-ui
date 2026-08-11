@@ -54,7 +54,7 @@ export const DatePicker = ({
         }
     }
 
-    const handleChange = (event: DateTimePickerChangeEvent, selectedDate?: Date) => {
+    const handleChange = (_event: DateTimePickerChangeEvent, selectedDate?: Date) => {
         setOpenPicker(false);
         if (selectedDate) {
             applyDate(selectedDate, Platform.OS === "android");
