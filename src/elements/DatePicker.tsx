@@ -52,6 +52,12 @@ export const DatePicker = ({ hasText = false, backgroundColor, textColor, initia
                 open={openPicker}
                 date={date}
                 mode="date"
+                onDateChange={(selectedDate: Date) => {
+                    setDate(selectedDate);
+                    if (onDateChange) {
+                        onDateChange(selectedDate);
+                    }
+                }}
                 locale="fr-FR"
                 theme="auto"
                 buttonColor={bgColor}
