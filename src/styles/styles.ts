@@ -92,6 +92,22 @@ export const createStyles = (v: ThemeVariables) =>
             shadowRadius: 1.41,
             elevation: 2,
         },
+        cardText: {
+            color: v["text-body"],
+            fontSize: 18,
+            fontWeight: "bold"
+        },
+        cardSecondaryText: {
+            color: v["text-secondary"],
+            fontSize: 12
+        },
+        cardTitle: {
+            fontFamily: 'Formula1-Bold',
+            fontSize: 20,
+            textTransform: 'uppercase',
+            color: v["text-body"],
+        },
+
 
         //Input
         input: {

@@ -25,9 +25,17 @@ export type ThemeVariables = {
     "text-body": string;
     "text-secondary": string;
     "text-disabled": string;
-    "border-color": string;
     "bg-card": string;
     "bg-form": string;
+
+    //Borders colors
+    "border-color": string;
+    "border-color-warning": string;
+    "border-color-danger": string;
+    "border-color-success": string;
+    "border-color-info": string;
+    "border-color-primary": string;
+    "border-color-secondary": string;
 
     //Sizes
     gap: number;
@@ -63,9 +71,15 @@ export const lightTheme: ThemeVariables = {
     "text-body": "#1e1e1e",
     "text-secondary": "#777777",
     "text-disabled": "#a0aab4",
-    "border-color": "#DDDDDDFF",
     "bg-card": "#FCFCFC",
     "bg-form": "#FFFFFF",
+    "border-color": "#DDDDDDFF",
+    "border-color-warning": "#eeba1e",
+    "border-color-danger": "#D9314A",
+    "border-color-success": "#66cf96",
+    "border-color-info": "#5bb7f8",
+    "border-color-primary": "#004999",
+    "border-color-secondary": "#d84496",
     ...shared,
 };
 
@@ -89,8 +103,14 @@ export const darkTheme: ThemeVariables = {
     "text-body": "#F5F5F5",
     "text-secondary": "#A0A0A0",
     "text-disabled": "#6B6B6B",
-    "border-color": "#333333",
     "bg-card": "#1A1A1A",
     "bg-form": "#000000",
+    "border-color": "#333333",
+    "border-color-warning": "#eeba1e",
+    "border-color-danger": "#D9314A",
+    "border-color-success": "#66cf96",
+    "border-color-info": "#5bb7f8",
+    "border-color-primary": "#004999",
+    "border-color-secondary": "#d84496",
     ...shared,
 };
