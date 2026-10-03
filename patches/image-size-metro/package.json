@@ -1,0 +1,10 @@
+﻿{
+  "name": "image-size",
+  "version": "2.1.0-metro.1",
+  "description": "Metro-compatible shim over image-size-next (accepts file path or buffer)",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "image-size-next": "2.1.0"
+  }
+}

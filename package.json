@@ -1,6 +1,6 @@
 {
 	"name": "react-native-klistra-ui",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Librairie de composants React Native avec thème light / dark",
 	"author": "Clément Lauer",
 	"license": "MIT",
@@ -45,6 +45,7 @@
 	},
 	"scripts": {
 		"prepare": "bob build",
+		"postinstall": "node scripts/ensure-image-size-shim.js",
 		"build": "bob build",
 		"typecheck": "tsc --noEmit",
 		"start": "expo start",
@@ -77,7 +78,7 @@
 	},
 	"overrides": {
 		"uuid": "^11.1.1",
-		"image-size": "npm:image-size-next@2.1.0"
+		"image-size": "file:patches/image-size-metro"
 	},
 	"react-native-builder-bob": {
 		"source": "src",

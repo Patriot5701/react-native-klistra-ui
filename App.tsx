@@ -108,6 +108,14 @@ function Playground() {
                 <Accordion title="Accordion 1">
                     <Text style={{ color: theme["text-body"] }}>Content 1</Text>
                 </Accordion>
+
+                <Text style={{ color: theme["text-secondary"], textAlign: "center" }}>
+                    Surcharge de thème
+                </Text>
+
+                <ThemeProvider mode="light" theme={{ primary: "#9400D3" }}>
+                    <Badge text="Badge primaire violet"/>
+                </ThemeProvider>
             </ScrollView>
         </View>
     );

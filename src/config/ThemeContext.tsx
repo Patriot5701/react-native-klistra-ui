@@ -31,8 +31,12 @@ function ThemeProvider({ mode = "light", theme: overrides, children }: ThemeProv
     );
 }
 
-function useTheme(): ThemeVariables {
-    return useContext(ThemeContext).theme;
+function useTheme(overrides?: Partial<ThemeVariables>): ThemeVariables {
+    const theme = useContext(ThemeContext).theme;
+    return useMemo(
+        () => (overrides ? { ...theme, ...overrides } : theme),
+        [theme, overrides],
+    );
 }
 
 function useThemeMode(): ThemeMode {
